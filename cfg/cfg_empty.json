@@ -1,0 +1,14 @@
+{
+  "keys": {
+    "discord": {
+      "app_id": "",
+      "public_key": "",
+      "client_secret": "",
+      "bot_token": ""
+    }
+  },
+  "config": {
+    "dev_mode": true,
+    "dev_guild_id": 0
+  }
+}
