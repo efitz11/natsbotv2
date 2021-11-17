@@ -1,16 +1,18 @@
-# This is a sample Python script.
+# bot.py
+from discord import Intents
+from discord.ext.commands import Bot
+from discord_slash import SlashCommand
+import utils
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+# Note that command_prefix is a required but essentially unused paramater.
+# Setting help_command=False ensures that discord.py does not create a !help command.
+# Enabling self_bot ensures that the bot does not try and parse messages that start with "!".
+
+bot = Bot(command_prefix="&", self_bot=True, help_command=None, intents=Intents.default())
+slash = SlashCommand(bot, sync_commands=True)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+bot.load_extension("baseball")
+discord_token = utils.get_keys('discord')['bot_token']
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+bot.run(discord_token)
