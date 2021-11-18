@@ -3,6 +3,7 @@ from discord.ext.commands import Bot, Cog
 from discord_slash import cog_ext, SlashContext
 from discord_slash.utils.manage_commands import create_option
 
+import newmlbstats
 import utils
 
 
@@ -22,13 +23,18 @@ class Baseball(Cog):
 
     @cog_ext.cog_subcommand(base="mlb", guild_ids=dev_ids, name="stats", description="display MLB player stats",
                             options=[
-        create_option(name="season",
-                      description="Specify a season other than this year's",
-                      option_type=3,
-                      required=False)
+                                create_option(name="player_name",
+                                              description="Player to search for",
+                                              option_type=3,
+                                              required=True),
+                                create_option(name="season",
+                                              description="Specify a season other than this year's (year delta like '-1' works too)",
+                                              option_type=3,
+                                              required=False)
     ])
-    async def mlb_stats(self, ctx: SlashContext, player_name: str, season:str):
-        await ctx.send("mlb stats for %s!" % player_name)
+    async def mlb_stats(self, ctx: SlashContext, player_name: str, season=None):
+        res = "```%s```" % newmlbstats.get_player_season_stats(player_name, year=season)
+        await ctx.send(res)
 
 
 def setup(bot: Bot):
