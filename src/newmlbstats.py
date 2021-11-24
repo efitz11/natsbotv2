@@ -1102,7 +1102,11 @@ def print_games(args, delta=None):
     if isinstance(args, list):
         args = ' '.join(args)
 
-    all_games = get_schedule(delta)[0]['games']
+    all_games = get_schedule(delta)
+    if len(all_games) > 0:
+        all_games = all_games[0]['games']
+    else:
+        return "No games on this day", 0
     games = list()
     add_last_play = False
 
@@ -1114,13 +1118,13 @@ def print_games(args, delta=None):
                 if game['linescore']['currentInning'] >= 7 and abs(awayruns-homeruns) <= 2:
                     games.append(game)
         if len(games) == 0:
-            return "No close (7th inning or later within 2 runs) games at the moment."
+            return "No close (7th inning or later within 2 runs) games at the moment.", 0
     elif 'live' in args:
         for game in all_games:
             if game['status']['abstractGameCode'] == "L":
                 games.append(game)
         if len(games) == 0:
-            return "No live games at the moment."
+            return "No live games at the moment.", 0
     elif args in lgs:
         standings = mymlbstats.get_lg_standings(lgs[args],wc=True)['records'][0]['teamRecords']
         wcteams = []
@@ -1138,7 +1142,7 @@ def print_games(args, delta=None):
             if awaydiv == divs[args] or homediv == divs[args]:
                 games.append(game)
         if len(games) == 0:
-            return "No games for division found"
+            return "No games for division found", 0
     elif len(args) > 0:
         add_last_play = True
         teamid = mymlbstats.get_teamid(args)
